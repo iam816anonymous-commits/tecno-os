@@ -1,0 +1,20 @@
+# TECNO IN6 Fastboot Capability Inventory Baseline
+# Verified Telemetry from TECNO IN6 / H633 Bootloader (LK)
+
+product: IN6_H633
+unlocked: yes
+secure: no
+kernel: lk
+partition-type:boot: raw
+partition-size:boot: 0x2000000 (32MB)
+partition-size:recovery: 0x2000000 (32MB)
+partition-size:system: 0xc0000000 (3GB)
+partition-size:vendor: 0x50000000 (1.25GB)
+partition-size:userdata: 0x32000000 (800MB default, eMMC total 32GB)
+
+# Fastboot Protocol Capability Audit:
+fastboot boot: UNKNOWN — REQUIRES IN6 MEASUREMENT (Must test tethered boot payload)
+fastboot flash: SUPPORTED (STRICTLY DISABLED BY REPOSITORY SAFETY POLICY)
+fastboot fetch: NOT SUPPORTED (Confirmed MediaTek LK limitation)
+fastboot erase: SUPPORTED (STRICTLY DISABLED BY REPOSITORY SAFETY POLICY)
+fastboot format: SUPPORTED (STRICTLY DISABLED BY REPOSITORY SAFETY POLICY)

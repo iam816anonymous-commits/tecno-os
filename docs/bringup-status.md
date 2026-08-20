@@ -1,45 +1,42 @@
-# IN6-Linux Project Bring-Up Status Report (Milestone v0.1)
+# IN6-Linux Project Bring-Up Status Matrix (Real Boot Validation Phase)
 
-## Executive Status Dashboard
+## Executive Summary
+This document tracks the current status of every core milestone and hardware subsystem in the **IN6-Linux** operating system port for the **TECNO IN6 / H633** (MediaTek MT6763 / Helio P23 SoC).
 
-```
-+-------------------------------------------------------------------+
-|  IN6-LINUX BRING-UP STATUS: CANDIDATE BOOT IMAGE READY (v0.1)     |
-|  TARGET DEVICE: TECNO IN6 / H633 (MediaTek MT6763 / Helio P23)    |
-|  SAFETY DIRECTIVE: NON-DESTRUCTIVE / ZERO FLASHING COMMANDS       |
-+-------------------------------------------------------------------+
-```
+> **STRICT SAFETY POLICY**:
+> All build artifacts and scripts enforce non-destructive operations.
+> No flashing commands (`fastboot flash`, `erase`, `format`, or block writing) have been executed or embedded in repository scripts.
 
 ---
 
-## Component Status Matrix
+## Bring-Up Status Classification Matrix
 
-| Project Element | Status | Detail / Artifact |
+| Category / Component | Status Flag | Detail / Evidence Basis |
 |---|---|---|
-| **Hardware Inventory Baseline** | **[CONFIRMED]** | Complete telemetry in `inventory/` (cpuinfo, getprop, partitions, modules). |
-| **Current State Audit** | **[CONFIRMED]** | Complete evidence categorization in `docs/current-state-audit.md`. |
-| **Kernel Source Selection** | **[CONFIRMED]** | Transsion MT6763 4.4.95 source selected (`Power535/android_kernel_common_MT6763`). |
-| **Kernel Strategy** | **[CONFIRMED]** | Phased hybrid strategy documented in `docs/kernel-port-strategy.md`. |
-| **Stock Defconfig** | **[CONFIRMED]** | Reconstructed in `kernel/configs/in6-stock-defconfig` matching `tran_in6`. |
-| **Device Tree Source (DTS)** | **[CONFIRMED]** | Authored `mt6763-tecno-in6.dts` & `.dtsi` with evidence tags. |
-| **Device Tree Binary (DTB)** | **[WORKING]** | Compiles reproducibly via `dtc` into `build/artifacts/mt6763-tecno-in6.dtb`. |
-| **Minimal Initramfs** | **[WORKING]** | Generates `build/artifacts/initramfs.cpio.gz` with diagnostic `/init` shell banner. |
-| **Candidate Boot Image** | **[WORKING]** | Packaged candidate `build/artifacts/boot.img` with Android Header v0. |
-| **Boot Image Inspector** | **[WORKING]** | Executable tool `tools/boot/inspect_boot.py`. |
-| **Boot Image Validator** | **[WORKING]** | Executable tool `tools/boot/validate_boot_image.py`. |
-| **Automated Host Verification**| **[WORKING]** | `build/verify.sh` and 8 Python host tests pass with 0 errors. |
-| **First Boot Protocol** | **[CONFIRMED]** | Documented tethered boot protocol in `docs/first-boot-experiment.md`. |
-| **Recovery Strategy** | **[CONFIRMED]** | Documented safety boundaries & partition warnings in `docs/recovery-strategy.md`. |
-| **Device Physical Boot Test** | **[NOT TESTED]** | Pending manual execution of `fastboot boot build/artifacts/boot.img`. |
+| **HOST BUILD** | **PASS** | `build/verify.sh` compiles DTS, builds initramfs, packages `boot.img`, and passes all host tests. |
+| **STRUCTURAL BOOT IMAGE** | **PASS** | `build/artifacts/boot.img` parsed and verified by `tools/boot/inspect_boot.py` as `STRUCTURALLY VALID BOOT IMAGE`. |
+| **KERNEL CONFIGURATION** | **CONFIRMED** | Reconstructed in `kernel/configs/in6-stock-defconfig` matching stock `/proc/config.gz` and `tran_in6` flags. |
+| **DEVICE TREE** | **CONFIRMED** | Authored `device/tecno/in6/dts/mt6763-tecno-in6.dts` & `.dtsi` with evidence tags (`dtc` compiles with 0 errors). |
+| **INITRAMFS** | **CONFIRMED** | Generates `build/artifacts/initramfs.cpio.gz` with diagnostic `/init` shell banner script. |
+| **QEMU BOOT** | **NOT APPLICABLE** | Kernel relies on MT6763 SoC IP cores (`topckgen`, `pwrap`, MT6358 PMIC) which lack QEMU machine models. |
+| **FASTBOOT CAPABILITY** | **CONFIRMED** | Bootloader state verified: `unlocked: yes`, `secure: no`, `product: IN6_H633`. |
+| **TEMPORARY BOOT SUPPORT** | **UNKNOWN** | Requires physical execution test (`fastboot boot build/artifacts/boot.img`). |
+| **PHYSICAL KERNEL BOOT** | **NOT TESTED** | Pending manual execution of tethered boot experiment. |
+| **INITRAMFS BOOT** | **NOT TESTED** | Pending physical kernel boot execution. |
+| **USB/ADB BOOT** | **NOT TESTED** | Pending physical initramfs execution. |
+| **DISPLAY** | **UNKNOWN** | MIPI DSI controller defined; specific panel init sequence **UNMEASURED** (`REQUIRES_IN6_MEASUREMENT`). |
+| **TOUCH** | **UNKNOWN** | `/dev/input/event2` (`mtk-tpd`) wrapper present; I2C slave address **UNMEASURED** (`REQUIRES_IN6_MEASUREMENT`). |
+| **STORAGE** | **CONFIRMED** | eMMC 5.1 (`/dev/block/mmcblk0`) verified via `/proc/partitions` and `mtk-sd` driver. |
+| **WIFI** | **LIKELY** | `wlan_drv_gen2.ko` present in stock `/vendor/lib/modules`; requires `WLAN_RAM_CODE_MT6763` firmware binary. |
+| **BLUETOOTH** | **LIKELY** | `bt_drv.ko` present in stock `/vendor/lib/modules`; supported by `btmtkuart` driver + `stpbt.bin` firmware. |
+| **AUDIO** | **CONFIRMED** | MT6358 internal audio codec & ALSA AFE supported in kernel driver stack. |
+| **CAMERA** | **UNKNOWN** | Front & Rear CMOS camera sensor models **UNMEASURED**. |
+| **MODEM** | **INFERRED** | MediaTek CCCI baseband modem interface requires `md1img` / `md1dsp` firmware images. |
 
 ---
 
-## Exact Unknowns & Risks
-1. **[UNKNOWN] Touchscreen Controller**: I2C slave address and IC model unmeasured (`REQUIRES_IN6_MEASUREMENT`).
-2. **[UNKNOWN] MIPI DSI Panel Timings**: Specific panel init sequence unextracted due to missing stock boot.img dump.
-3. **[BLOCKED] Stock Firmware Backup**: No stock factory ROM package currently in possession. **Flashing internal partitions is strictly blocked.**
+## Exact Unknowns & Blockers
 
----
-
-## Recommended Next Hardware Action
-Execute tethered boot experiment (`fastboot boot build/artifacts/boot.img`) from Fastboot mode and monitor USB serial gadget (`/dev/ttyGS0`).
+1. **[UNKNOWN] Temporary Boot Protocol Support**: Must test whether the IN6 LK bootloader accepts `fastboot boot`. If unsupported, temporary boot is flagged `UNSUPPORTED` and flashing remains blocked.
+2. **[UNKNOWN] Display Panel Init Sequence**: DSI display parameters unextracted due to missing stock `boot.img` dump.
+3. **[BLOCKED] Stock Factory Firmware Backup**: No full stock factory ROM package currently in possession. **Flashing internal partitions is strictly prohibited.**
