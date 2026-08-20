@@ -26,9 +26,9 @@
 ## Strict Evidence Separation Notice
 
 > **HOST-VALIDATED RESULTS**:
-> - Candidate `boot.img` structurally valid (Android Header v0 format, page 2048, 32B `id` offset).
+> - Candidate `boot.img` structurally valid (Android Header v0 format, page 2048, 32B `id` offset at 576, extra_cmdline at 608).
 > - `mt6763-tecno-in6.dts` preprocessed and compiled to DTB via `dtc` with 0 warnings.
-> - Initramfs `init` script verified with executable `#!/bin/sh` shebang.
+> - Initramfs `init` script verified with executable `#!/bin/sh` shebang syntax.
 > - All 10 host unit tests in `tests/host/` pass 100%.
 >
 > **DEVICE-VALIDATED RESULTS**:
