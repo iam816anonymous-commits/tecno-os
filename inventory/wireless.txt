@@ -1,0 +1,9 @@
+Wireless Subsystem Overview:
+- Connectivity Combo IC: MediaTek MT6631 / MT6625L combo chip (Wi-Fi, Bluetooth, FM, GPS).
+- Loaded Modules:
+  - `wmt_drv.ko` (Core WMT driver)
+  - `wlan_drv_gen2.ko` (Wi-Fi driver)
+  - `bt_drv.ko` (Bluetooth driver)
+  - `gps_drv.ko` (GPS driver)
+  - `fmradio_drv.ko` (FM Radio driver)
+  - `wmt_chrdev_wifi.ko` (Wi-Fi character device interface)

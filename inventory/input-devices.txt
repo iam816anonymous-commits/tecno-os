@@ -1,0 +1,4 @@
+add_device: /dev/input/event0 (mtk-kpd)
+add_device: /dev/input/event1 (pmic_keys)
+add_device: /dev/input/event2 (mtk-tpd)
+add_device: /dev/input/event3 (headset-keyboard)

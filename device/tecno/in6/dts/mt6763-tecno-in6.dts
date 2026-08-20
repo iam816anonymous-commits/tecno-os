@@ -1,0 +1,15 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Device Tree Source for TECNO IN6 / H633 (MediaTek MT6763 / Helio P23)
+ *
+ * Copyright (c) 2025 IN6-Linux Project
+ */
+
+/dts-v1/;
+
+#include "mt6763-tecno-in6.dtsi"
+
+/ {
+	model = "TECNO IN6 (H633)";
+	compatible = "tecno,in6", "mediatek,mt6763";
+};

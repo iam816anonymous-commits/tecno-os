@@ -1,0 +1,27 @@
+I: Bus=0019 Vendor=0001 Product=0001 Version=0100
+N: Name="mtk-kpd"
+P: Phys=
+S: Sysfs=/devices/platform/1000b000.kpd/input/input0
+U: Uniq=
+H: Handlers=event0
+
+I: Bus=0019 Vendor=0001 Product=0001 Version=0100
+N: Name="pmic_keys"
+P: Phys=pmic_keys/input0
+S: Sysfs=/devices/platform/1000d000.pwrap/1000d000.pwrap:main_pmic/mt6358-keys/input/input1
+U: Uniq=
+H: Handlers=event1
+
+I: Bus=0018 Vendor=0000 Product=0000 Version=0000
+N: Name="mtk-tpd"
+P: Phys=
+S: Sysfs=/devices/platform/mtk-tpd/input/input2
+U: Uniq=
+H: Handlers=event2
+
+I: Bus=0019 Vendor=0001 Product=0001 Version=0100
+N: Name="headset-keyboard"
+P: Phys=
+S: Sysfs=/devices/platform/ACCDET/input/input3
+U: Uniq=
+H: Handlers=event3

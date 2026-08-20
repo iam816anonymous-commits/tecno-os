@@ -1,0 +1,92 @@
+/dts-v1/;
+/dts-v1/;
+/ {
+ compatible = "tecno,in6", "mediatek,mt6763";
+ model = "TECNO IN6";
+ #address-cells = <2>;
+ #size-cells = <2>;
+ chosen {
+  bootargs = "earlycon=uart8250,mmio32,0x11002000 console=ttyS0,115200n8 root=/dev/mmcblk0p33 rw rootwait init=/init";
+ };
+ memory@40000000 {
+  device_type = "memory";
+  reg = <0x0 0x40000000 0x0 0xc0000000>;
+ };
+ reserved-memory {
+  #address-cells = <2>;
+  #size-cells = <2>;
+  ranges;
+  tz_reserved: memory@43000000 {
+   reg = <0x0 0x43000000 0x0 0x01000000>;
+   no-map;
+  };
+ };
+ soc {
+  #address-cells = <2>;
+  #size-cells = <2>;
+  compatible = "simple-bus";
+  ranges;
+  gic: interrupt-controller@10201000 {
+   compatible = "arm,gic-v3";
+   #interrupt-cells = <3>;
+   interrupt-controller;
+   reg = <0x0 0x10201000 0x0 0x1000>,
+         <0x0 0x10202000 0x0 0x2000>;
+  };
+  apb {
+   #address-cells = <2>;
+   #size-cells = <2>;
+   compatible = "simple-bus";
+   ranges;
+   uart0: serial@11002000 {
+    compatible = "mediatek,mt6763-uart", "mediatek,mt6577-uart";
+    reg = <0x0 0x11002000 0x0 0x1000>;
+    interrupt-parent = <&gic>;
+    interrupts = <0 91 0x4>;
+    status = "okay";
+   };
+   i2c0: i2c@11007000 {
+    compatible = "mediatek,mt6763-i2c", "mediatek,mt6577-i2c";
+    reg = <0x0 0x11007000 0x0 0x1000>;
+    #address-cells = <1>;
+    #size-cells = <0>;
+    status = "okay";
+    touchscreen@0 {
+     compatible = "generic,touchscreen", "REQUIRES_IN6_MEASUREMENT";
+     reg = <0x0>;
+     status = "disabled";
+    };
+   };
+   mmc0: mmc@11230000 {
+    compatible = "mediatek,mt6763-mmc", "mediatek,mt8173-mmc";
+    reg = <0x0 0x11230000 0x0 0x1000>;
+    interrupt-parent = <&gic>;
+    interrupts = <0 79 0x4>;
+    status = "okay";
+   };
+  };
+ };
+ gpio-keys {
+  compatible = "gpio-keys";
+  key-volume-up {
+   label = "Volume Up";
+   gpios = <&pio 1 0>;
+   linux,code = <115>;
+  };
+  key-volume-down {
+   label = "Volume Down";
+   gpios = <&pio 2 0>;
+   linux,code = <114>;
+  };
+ };
+ pio: pinctrl@10005000 {
+  compatible = "mediatek,mt6763-pinctrl";
+  reg = <0x0 0x10005000 0x0 0x1000>;
+  gpio-controller;
+  #gpio-cells = <2>;
+ };
+};
+/ {
+ model = "TECNO IN6 (H633)";
+ compatible = "tecno,in6", "mediatek,mt6763";
+};

@@ -1,0 +1,4 @@
+Audio Subsystem Overview:
+- Primary Codec: MediaTek MT6358 internal audio codec / MT6763 AFE (Audio Front End).
+- Outputs: Speaker, Earpiece, 3.5mm Headphone Jack (`ACCDET` event driver).
+- Microphones: Dual mic setup (Primary + Noise Cancellation Mic).

@@ -1,0 +1,5 @@
+Camera Subsystem Overview:
+- Front Camera: Unknown — requires identification.
+- Rear Camera: Unknown — requires identification.
+- Flash Driver: MediaTek Flashlight driver (GPIO / I2C PMIC driven).
+- ISP: MediaTek MT6763 ISP 3.0 core.

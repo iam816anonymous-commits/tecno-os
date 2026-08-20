@@ -1,0 +1,5 @@
+Display Subsystem Overview:
+- Panel IC: Unknown — requires identification from DTB / kernel log.
+- Interface: MIPI DSI (4-lane) via MediaTek DISP / DRM subsystem.
+- Framebuffer: `/dev/graphics/fb0` (Legacy MTK DRM / FB driver).
+- Display Controller: MT6763 DISP IP core (mipi_tx / dsi0).

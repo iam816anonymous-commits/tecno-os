@@ -1,0 +1,7 @@
+bt_drv 110592 0 - Live 0x0000000000000000 (O)
+fmradio_drv 94208 0 - Live 0x0000000000000000 (O)
+gps_drv 81920 0 - Live 0x0000000000000000 (O)
+met 417792 0 - Live 0x0000000000000000 (O)
+wlan_drv_gen2 1048576 0 - Live 0x0000000000000000 (O)
+wmt_chrdev_wifi 20480 0 - Live 0x0000000000000000 (O)
+wmt_drv 442368 5 bt_drv,fmradio_drv,gps_drv,wlan_drv_gen2,wmt_chrdev_wifi, Live 0x0000000000000000 (O)

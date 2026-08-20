@@ -1,0 +1,4 @@
+Power & Battery Subsystem Overview:
+- PMIC: MediaTek MT6358 / MT6357 primary power management IC.
+- Charger IC: Unknown — requires identification.
+- Battery Subsystem: MediaTek Battery / Power Supply Driver (`mtk_battery`).

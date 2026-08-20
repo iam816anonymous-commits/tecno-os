@@ -1,0 +1,7 @@
+Sensors Subsystem Overview:
+- Acceleration Sensor: Unknown — requires identification from device tree / I2C bus scan.
+- Proximity Sensor: Unknown — requires identification.
+- Ambient Light Sensor: Unknown — requires identification.
+- Magnetometer / Compass: Unknown — requires identification.
+- Gyroscope: Unknown — requires identification.
+- Fingerprint Sensor: Present on device (SPI/I2C backed) — specific IC model requires identification.

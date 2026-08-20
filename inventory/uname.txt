@@ -1,0 +1,7 @@
+Linux localhost 4.4.95+ #1 SMP PREEMPT Fri Oct 23 17:05:21 CST 2020 aarch64 GNU/Linux
+Kernel Compiler: GCC 6.3.1 / Linaro GCC 6.3-2017.02
+Kernel Config Flags:
+CONFIG_CUSTOM_TRAN_PROJECT="tran_in6"
+CONFIG_CUSTOM_TRAN_BOM="tran_in6_a1"
+CONFIG_ARM64=y
+CONFIG_64BIT=y

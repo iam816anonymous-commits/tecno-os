@@ -1,0 +1,4 @@
+Stock Device Tree Files Dump List:
+- dtb.img / odmdtbo.img partition contents
+- `mt6763v_v_tran_in6_a1.dtb`
+- Base DTSI files: `mt6763.dtsi`, `mt6358.dtsi`
