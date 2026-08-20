@@ -2,7 +2,7 @@
 /dts-v1/;
 / {
  compatible = "tecno,in6", "mediatek,mt6763";
- model = "TECNO IN6";
+ model = "TECNO IN6 (H633)";
  #address-cells = <2>;
  #size-cells = <2>;
  chosen {

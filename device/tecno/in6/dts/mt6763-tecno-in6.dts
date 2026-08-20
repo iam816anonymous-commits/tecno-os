@@ -3,6 +3,9 @@
  * Device Tree Source for TECNO IN6 / H633 (MediaTek MT6763 / Helio P23)
  *
  * Copyright (c) 2025 IN6-Linux Project
+ *
+ * EVIDENCE TAG:
+ * - CONFIRMED FROM DEVICE: ro.product.model = TECNO IN6, ro.build.product = IN6_H633
  */
 
 /dts-v1/;

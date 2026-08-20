@@ -12,7 +12,7 @@ echo "      IN6-Linux Automated Host Validation         "
 echo "=================================================="
 
 # 1. Verify DTS compilation
-echo "[1/5] Verifying DTS Compilation..."
+echo "[1/6] Verifying DTS Compilation..."
 if [ -f "${ROOT_DIR}/device/tecno/in6/dts/mt6763-tecno-in6.dts" ]; then
     cpp -P -undef -x assembler-with-cpp "${ROOT_DIR}/device/tecno/in6/dts/mt6763-tecno-in6.dts" /tmp/in6_test.dts
     if dtc -I dts -O dtb -o /dev/null /tmp/in6_test.dts 2>/dev/null; then
@@ -28,8 +28,8 @@ else
 fi
 
 # 2. Verify forbidden flash commands in executable build/tools scripts
-echo "[2/5] Checking for Forbidden Flashing Commands..."
-FORBIDDEN_TERMS=("fastboot flash" "fastboot erase" "fastboot format" "dd if=.* of=/dev/block")
+echo "[2/6] Checking for Forbidden Flashing Commands..."
+FORBIDDEN_TERMS=("fastboot flash" "fastboot erase" "fastboot format" "fastboot reboot recovery" "dd if=.* of=/dev/block")
 
 FOUND_FORBIDDEN=0
 for script in $(find "${ROOT_DIR}/build" "${ROOT_DIR}/tools" -type f \( -name "*.sh" -o -name "*.py" -o -name "*.ps1" \)); do
@@ -51,14 +51,18 @@ if [ ${FOUND_FORBIDDEN} -eq 0 ]; then
 fi
 
 # 3. Verify documentation completeness
-echo "[3/5] Verifying Documentation Integrity..."
+echo "[3/6] Verifying Documentation Integrity..."
 REQUIRED_DOCS=(
     "docs/architecture.md"
     "docs/hardware-overview.md"
     "docs/hardware-compatibility.md"
     "docs/kernel-strategy.md"
+    "docs/kernel-port-strategy.md"
+    "docs/kernel-config-analysis.md"
+    "docs/current-state-audit.md"
     "docs/boot-chain.md"
     "docs/device-tree.md"
+    "docs/device-tree-evidence.md"
     "docs/firmware.md"
     "docs/userspace.md"
     "docs/security-model.md"
@@ -75,7 +79,7 @@ done
 echo "  [PASS] All core architecture documents present and non-empty."
 
 # 4. Verify inventory files
-echo "[4/5] Verifying Hardware Inventory Baseline..."
+echo "[4/6] Verifying Hardware Inventory Baseline..."
 REQUIRED_INVENTORY=(
     "inventory/getprop.txt"
     "inventory/cpuinfo.txt"
@@ -95,7 +99,7 @@ done
 echo "  [PASS] Hardware inventory baseline intact."
 
 # 5. Execute full build pipeline test
-echo "[5/5] Testing Build System Execution..."
+echo "[5/6] Testing Build System Execution..."
 bash "${ROOT_DIR}/build/clean.sh" >/dev/null
 bash "${ROOT_DIR}/build/configure.sh" >/dev/null
 bash "${ROOT_DIR}/build/build-kernel.sh" >/dev/null
@@ -108,6 +112,17 @@ else
     echo "  [FAIL] Build pipeline failed to generate boot.img artifact."
     ERRORS=$((ERRORS + 1))
 fi
+
+# 6. Execute Python Host Test Suite
+echo "[6/6] Running Host Test Suite..."
+for test_file in "${ROOT_DIR}/tests/host"/test_*.py; do
+    if python3 "${test_file}" >/dev/null 2>&1; then
+        echo "  [PASS] $(basename "${test_file}")"
+    else
+        echo "  [FAIL] $(basename "${test_file}")"
+        ERRORS=$((ERRORS + 1))
+    fi
+done
 
 echo "=================================================="
 if [ ${ERRORS} -eq 0 ]; then
