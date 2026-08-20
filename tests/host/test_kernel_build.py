@@ -11,7 +11,7 @@ def test_kernel_build():
 
     assert build_script.exists(), "build-kernel.sh does not exist"
 
-    # Execute build-kernel.sh
+    # Execute build-kernel.sh with real kernel source or binary check
     res = subprocess.run(["bash", str(build_script)], capture_output=True, text=True)
     assert res.returncode == 0, f"build-kernel.sh failed with error:\n{res.stderr}"
 
