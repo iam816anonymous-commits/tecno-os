@@ -1,0 +1,3 @@
+[submodule "kernel/src"]
+	path = kernel/src
+	url = https://github.com/Power535/android_kernel_common_MT6763

@@ -1,7 +1,6 @@
 build/artifacts/
 build/intermediate/
 build/logs/
-kernel/src/
 *.pp.dts
 *.dtb
 *.cpio.gz
