@@ -1,4 +1,4 @@
-# IN6-Linux Project Bring-Up Status Matrix (Phase 3 Real Hardware Bring-Up)
+# IN6-Linux Project Bring-Up Status Matrix (Real Hardware Bring-Up)
 
 ## Executive Summary
 This document tracks the current status of every core milestone and hardware subsystem in the **IN6-Linux** operating system port for the **TECNO IN6 / H633** (MediaTek MT6763 / Helio P23 SoC).

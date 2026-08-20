@@ -28,13 +28,19 @@ def inspect_boot_image(filepath: Path):
         return False
 
     # Unpack Android Header v0/v1/v2
+    # Standard Android Header v0 layout:
+    # 0..48: magic, sizes, addresses, page_size, header_version, os_version
+    # 48..64: name (16 bytes)
+    # 64..576: cmdline (512 bytes)
+    # 576..608: id (32 bytes)
+    # 608..1632: extra_cmdline (1024 bytes)
     try:
         header = struct.unpack("<8sIIIIIIIIII", data[:48])
         magic, kernel_size, kernel_addr, ramdisk_size, ramdisk_addr, \
             second_size, second_addr, tags_addr, page_size, header_version, os_version = header
 
+        name = data[48:64].decode("ascii", errors="ignore").rstrip("\x00")
         cmdline = data[64:576].decode("ascii", errors="ignore").rstrip("\x00")
-        name = data[576:592].decode("ascii", errors="ignore").rstrip("\x00")
 
         # Read SHA256 of full file
         sha256 = hashlib.sha256(filepath.read_bytes()).hexdigest()

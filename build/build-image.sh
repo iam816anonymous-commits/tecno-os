@@ -61,23 +61,16 @@ os_version = 0
 cmdline = b"earlycon=uart8250,mmio32,0x11002000 console=ttyS0,115200n8 root=/dev/mmcblk0p33 rw rootwait init=/init"
 
 # Android Header v0 structure:
-# struct boot_img_hdr {
-#   uint8_t magic[8];
-#   uint32_t kernel_size; uint32_t kernel_addr;
-#   uint32_t ramdisk_size; uint32_t ramdisk_addr;
-#   uint32_t second_size; uint32_t second_addr;
-#   uint32_t tags_addr; uint32_t page_size;
-#   uint32_t header_version; uint32_t os_version;
-#   uint8_t name[16];
-#   uint8_t cmdline[512];
-#   uint8_t id[8];
-#   uint8_t extra_cmdline[1024];
-# };
+# offset 0-48: magic, sizes, addresses, page_size, header_version, os_version
+# offset 48-64: name (16 bytes)
+# offset 64-576: cmdline (512 bytes)
+# offset 576-608: id (32 bytes)
+# offset 608-1632: extra_cmdline (1024 bytes)
 hdr = struct.pack("<8sIIIIIIIIII", magic, k_size, k_addr, r_size, r_addr, second_size, second_addr, tags_addr, page_size, header_version, os_version)
-hdr += b"\x00" * 16 # board name (16 bytes)
-hdr += cmdline.ljust(512, b"\x00") # primary cmdline (512 bytes)
-hdr += b"\x00" * 8  # id / checksum (8 bytes)
-hdr += b"\x00" * 1024 # extra cmdline (1024 bytes)
+hdr += b"\x00" * 16                 # name (16 bytes)
+hdr += cmdline.ljust(512, b"\x00")   # cmdline (512 bytes)
+hdr += b"\x00" * 32                 # id (32 bytes / 8x uint32)
+hdr += b"\x00" * 1024               # extra_cmdline (1024 bytes)
 
 hdr = hdr.ljust(page_size, b"\x00")
 
