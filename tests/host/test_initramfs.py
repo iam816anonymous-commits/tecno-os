@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Host Test: Validate Minimal Initramfs Root Filesystem Generation
+Host Test: Validate Minimal Initramfs Root Filesystem Generation & Shebang Integrity
 """
 import subprocess
 from pathlib import Path
@@ -17,6 +17,11 @@ def test_initramfs():
     initramfs_artifact = repo_root / "build" / "artifacts" / "initramfs.cpio.gz"
     assert initramfs_artifact.exists(), "initramfs.cpio.gz artifact missing"
     assert initramfs_artifact.stat().st_size > 0, "initramfs.cpio.gz artifact is 0 bytes"
+
+    init_script = repo_root / "build" / "intermediate" / "rootfs" / "init"
+    if init_script.exists():
+        first_line = init_script.read_text().splitlines()[0]
+        assert first_line == "#!/bin/sh", f"Invalid init shebang: {first_line}"
 
     print("test_initramfs PASSED")
 

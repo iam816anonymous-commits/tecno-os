@@ -18,7 +18,7 @@ echo "=================================================="
 
 # Create minimal bring-up init script
 cat << 'EOF' > "${ROOTFS_DIR}/init"
-#!/bin/bin/sh
+#!/bin/sh
 # Minimal IN6-Linux Phase 1 Research & Diagnostic Init Script
 export PATH=/bin:/sbin:/usr/bin:/usr/sbin
 

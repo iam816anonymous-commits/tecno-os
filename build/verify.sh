@@ -68,6 +68,20 @@ REQUIRED_DOCS=(
     "docs/security-model.md"
     "docs/bringup-plan.md"
     "docs/IN6-linux-research-report.md"
+    "docs/product/OS-VISION.md"
+    "docs/product/requirements.md"
+    "docs/product/privacy-model.md"
+    "docs/product/security-model.md"
+    "docs/product/permission-model.md"
+    "docs/product/network-model.md"
+    "docs/product/application-model.md"
+    "docs/product/android-compatibility.md"
+    "docs/product/power-model.md"
+    "docs/product/offline-model.md"
+    "docs/product/resource-budgets.md"
+    "docs/product/architecture-decision-record.md"
+    "docs/roadmap/OS-roadmap.md"
+    "research/reference-projects.md"
 )
 
 for doc in "${REQUIRED_DOCS[@]}"; do
@@ -76,7 +90,7 @@ for doc in "${REQUIRED_DOCS[@]}"; do
         ERRORS=$((ERRORS + 1))
     fi
 done
-echo "  [PASS] All core architecture documents present and non-empty."
+echo "  [PASS] All core architecture and product specification documents present and non-empty."
 
 # 4. Verify inventory files
 echo "[4/6] Verifying Hardware Inventory Baseline..."

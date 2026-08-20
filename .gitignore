@@ -1,0 +1,10 @@
+build/artifacts/
+build/intermediate/
+build/logs/
+*.pp.dts
+*.dtb
+*.cpio.gz
+*.bin
+*.sha256
+__pycache__/
+*.pyc
