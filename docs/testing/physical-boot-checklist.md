@@ -1,4 +1,4 @@
-# IN6-Linux Controlled Physical Boot Checklist
+# IN6-Linux Controlled Physical Boot Checklist & Pre-Flight Protocol
 
 ## Overview
 This document defines the strict pre-flight checklist required before executing a physical tethered boot experiment on the **TECNO IN6 / H633**.
@@ -7,6 +7,10 @@ This document defines the strict pre-flight checklist required before executing 
 > This experiment uses **ONLY** temporary, non-destructive tethered boot (`fastboot boot`).
 > If `fastboot boot` is unsupported by the IN6 LK bootloader, mark `TEMPORARY BOOT: UNSUPPORTED / UNKNOWN` and **STOP**.
 > Do **NOT** substitute `fastboot flash boot` automatically under any circumstances.
+>
+> **CRITICAL RECOVERY WARNING**:
+> No verified stock factory firmware package or stock `boot.img` dump is currently available.
+> Flashing internal partitions (`fastboot flash`) will cause permanent hardware corruption without a recovery path.
 
 ---
 
@@ -22,7 +26,8 @@ This document defines the strict pre-flight checklist required before executing 
 | **6** | Recovery path confirmed | **CONFIRMED** | Force reboot (`Power + Vol Down`) returns to stock Android |
 | **7** | Target HW model verified | **CONFIRMED** | TECNO IN6 / H633 (`IN6_H633`) |
 | **8** | Candidate `boot.img` SHA256 recorded | **CONFIRMED** | Verified in `build/artifacts/boot.img.sha256` |
-| **9** | No destructive command executed | **ENFORCED** | Enforced by `test_boot_safety.py` and repository policy |
+| **9** | Stock recovery image availability | **NO VERIFIED STOCK RECOVERY IMAGE AVAILABLE** | Extraction blocked by non-root ADB shell and fastboot fetch lack |
+| **10**| No destructive command executed | **ENFORCED** | Enforced by `test_boot_safety.py` and repository policy |
 
 ---
 

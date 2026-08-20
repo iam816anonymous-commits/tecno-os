@@ -4,8 +4,9 @@
 This document specifies the emergency recovery strategy and hardware safety boundaries for the **TECNO IN6 / H633**.
 
 > **CRITICAL WARNING**:
-> The project currently does **NOT** possess a verified full stock factory firmware dump.
+> **NO VERIFIED STOCK FACTORY RECOVERY IMAGE CURRENTLY AVAILABLE.**
 > Modifying critical calibration or boot partitions will cause **PERMANENT HARDWARE BRICKING**.
+> Purchasing stock firmware is not a prerequisite for research, but permanent flashing without a factory image is strictly prohibited.
 
 ---
 
