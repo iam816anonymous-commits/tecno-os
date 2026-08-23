@@ -47,7 +47,7 @@ fi
 
 # Build ARM64 gzip-compressed Image.gz
 echo "Compiling ARM64 kernel Image.gz using aarch64-linux-gnu-gcc..."
-make -C "${KERNEL_SRC_DIR}" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- Image.gz -j"$(nproc)"
+make -C "${KERNEL_SRC_DIR}" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- KCFLAGS="-w" HOSTCFLAGS="-fcommon" Image.gz -j"$(nproc)"
 
 if [ ! -f "${KERNEL_SRC_DIR}/arch/arm64/boot/Image.gz" ]; then
     echo "Error: Kernel build failed to produce ${KERNEL_SRC_DIR}/arch/arm64/boot/Image.gz"

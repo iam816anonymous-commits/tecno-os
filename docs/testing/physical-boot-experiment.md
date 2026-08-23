@@ -1,55 +1,39 @@
-# IN6-Linux Physical Tethered Boot Experiment Protocol
+# Physical Boot Experiment Protocol: TECNO IN6 / H633
 
-## Overview
-This document specifies the pre-flight checklist, execution command, and 10-stage failure classification framework for conducting physical tethered boot tests on the **TECNO IN6 / H633** (MediaTek MT6763).
+## Objective
+Tethered non-destructive execution test of the candidate IN6-Linux boot image on physical TECNO IN6 target hardware.
 
-> **STRICT SAFETY DIRECTIVE**:
-> All physical hardware bring-up tests MUST use temporary tethered boot (`fastboot boot`).
-> Flashing (`fastboot flash`), partition erasing, or raw block writing is strictly prohibited.
+## Safety & Non-Destructive Policy
+**CRITICAL MANDATE**:
+- Do **NOT** use `fastboot flash`.
+- Do **NOT** use `fastboot erase`.
+- Do **NOT** use `fastboot format`.
+- Do **NOT** perform raw block writes to `/dev/block/`.
 
----
+## Prerequisites
+1. Target Device: **TECNO IN6 (Model H633)**.
+2. Bootloader State: **Unlocked** (`unlocked: yes`).
+3. USB Connection: Host connected via Micro-USB data cable.
+4. Target Mode: `fastboot` mode (`adb reboot bootloader` or Vol Down + Power on boot).
 
-## 1. Pre-Flight Checklist
+## Tethered Boot Command
+Run the non-destructive tethered boot command from the host repository root:
 
-| Checklist Item | Requirement | Verification Method |
-|---|---|---|
-| **1. Battery Charge** | > 70% Charge | Verified on stock phone UI / battery icon |
-| **2. USB Connection** | Direct Micro-USB cable connection to host PC | `fastboot devices` returns device serial |
-| **3. Bootloader State** | Unlocked LK v0.5 | `fastboot getvar unlocked` returns `yes` |
-| **4. Hardware Model** | TECNO IN6 / H633 | `fastboot getvar product` returns `IN6_H633` |
-| **5. Image Validation** | `build/artifacts/boot.img` structurally valid | `python3 tools/boot/validate_boot_image.py build/artifacts/boot.img` PASS |
-| **6. Payload Hash** | SHA256 matches build hash | `sha256sum -c build/artifacts/boot.img.sha256` PASS |
-
----
-
-## 2. Non-Destructive Tethered Boot Command
-Execute on host development PC:
 ```bash
 fastboot boot build/artifacts/boot.img
 ```
 
----
+## Telemetry Capture Protocol
+1. **LK Bootloader Output**:
+   Observe screen state and USB serial console if UART adapter / CDC ACM is connected.
+2. **Kernel Telemetry**:
+   If earlycon/UART is attached, record kernel log stream starting at `0.000000`.
+3. **Initramfs / USB ADB**:
+   If kernel boots and initializes USB gadget, check `adb devices` or `dmesg` via host.
 
-## 3. Ten-Stage Physical Boot Failure Classification Framework
-
-When executing `fastboot boot build/artifacts/boot.img`, classify the exact point of failure using this 10-stage diagnosis tree:
-
-| Failure Stage # | Diagnostic Stage | Failure Symptom / Evidence | Root Cause & Next Resolution Action |
-|---|---|---|---|
-| **Stage 0** | Bootloader Image Rejection | Fastboot outputs `unknown command` or `command not allowed` | Temporary boot unsupported by LK v0.5. **STOP IMMEDIATELY**. |
-| **Stage 1** | Image Download Handoff | Fastboot hangs during `downloading 'boot.img'` | USB PHY communication error or payload size exceeds RAM limit. |
-| **Stage 2** | Boot Header Parsing | LK reports header magic mismatch or invalid page size | Android Header v0 struct offset mismatch. Re-verify `build/build-image.sh`. |
-| **Stage 3** | Decompressor Failure | Phone screen freezes at LK splash logo; no serial output | Gzip kernel decompression failure. Check `Image.gz` gzip header alignment. |
-| **Stage 4** | DTB Parsing / ATAGS | Kernel panics during `setup_arch()` before console | Device tree node incompatibility or memory base address mismatch. |
-| **Stage 5** | Early Kernel Panic | Screen stays black; `earlycon` outputs register fault | Drivers or clocks missing in `in6-stock-defconfig`. Check UART0 base (`0x11002000`). |
-| **Stage 6** | Platform / GIC Driver Crash| Kernel panics during IRQ / timer / PMIC initialization | GIC-v3 or MT6358 PMIC wrapper driver fault in kernel. |
-| **Stage 7** | Initramfs Execution Failure| Kernel panics with `Kernel panic - not syncing: Attempted to kill init!`| `/init` binary missing, invalid shebang syntax, or missing `/dev/console`. |
-| **Stage 8** | USB Gadget / Serial Failure| Kernel boots `/init` but no USB CDC ACM gadget enumerates | `mtu3` USB PHY driver or CDC ACM gadget config missing in defconfig. |
-| **Stage 9** | Userspace Shell Crash | `/init` executes banner then shell crashes | Missing C library dependencies or missing tty device nodes in initramfs. |
-
----
-
-## 4. Safe Force-Reboot Recovery
-If the device hangs at any stage:
-1. Press and hold **Power Button + Volume Down** simultaneously for 10 seconds.
-2. The TECNO IN6 powers down completely and reboots safely into the un-modified stock Android OS on internal eMMC flash.
+## Success & Failure Classification
+- **Level 0 (Bootloader Parse Error)**: Device hangs at LK or rejects boot header.
+- **Level 1 (Kernel Entry Crash)**: Screen stays black, kernel panics before console init.
+- **Level 2 (Early Console Output)**: Kernel prints early log output.
+- **Level 3 (Initramfs Executed)**: `/init` script executes milestone log messages.
+- **Level 4 (USB/ADB Available)**: Diagnostic shell reachable over USB.

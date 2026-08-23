@@ -1,0 +1,33 @@
+{
+  "project": "IN6-Linux",
+  "device": "TECNO IN6 / H633",
+  "soc": "MediaTek MT6763",
+  "state": "READY_FOR_PHYSICAL_BOOT",
+  "phase_b_kernel_compilation": {
+    "status": "HOST_VALIDATED",
+    "vmlinux_built": true,
+    "image_gz_built": true,
+    "gzip_integrity_verified": true,
+    "arm64_header_verified": true
+  },
+  "phase_c_dtb": {
+    "status": "HOST_VALIDATED",
+    "dtb_compiled": true
+  },
+  "phase_d_boot_image": {
+    "status": "HOST_VALIDATED",
+    "boot_img_built": true,
+    "header_version": "v0",
+    "page_size": 2048,
+    "validation_script_passed": true
+  },
+  "phase_e_initramfs": {
+    "status": "HOST_VALIDATED",
+    "initramfs_built": true
+  },
+  "physical_boot_state": {
+    "status": "AWAITING_PHYSICAL_DEVICE_EXECUTION",
+    "command": "fastboot boot build/artifacts/boot.img",
+    "device_validated": false
+  }
+}
