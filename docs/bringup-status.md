@@ -50,3 +50,24 @@ This document tracks the current status of every core milestone and hardware sub
 1. **[UNKNOWN] Temporary Boot Protocol Support**: Must test whether the IN6 LK bootloader accepts `fastboot boot`. If unsupported, temporary boot is flagged `UNSUPPORTED` and flashing remains blocked.
 2. **[UNKNOWN] Display Panel Init Sequence**: DSI display parameters unextracted due to missing stock `boot.img` dump.
 3. **[BLOCKED] Stock Factory Firmware Backup**: No full stock factory ROM package currently in possession. **Flashing internal partitions is strictly prohibited.**
+
+
+---
+
+## Additional Physical Hardware Validation — GPU Compute (2026-11-02)
+
+A separate, non-privileged GPUProbe APK was run on the physical TECNO IN6 / H633. This adds measured GPU-driver evidence but **does not change the IN6-Linux kernel boot status** above.
+
+| Capability | Device result | Evidence |
+|---|---|---|
+| Mali-G71 Vulkan access from ordinary APK | **CONFIRMED** | Vulkan 1.0.58; compute queue and pipeline created |
+| APK Vulkan vector-add workloads | **PASS, provisional benchmark** | Five workload sizes through 1,048,576 elements; zero reported incorrect outputs |
+| Vulkan limits and memory properties | **CAPTURED** | Workgroup limits, 256 MiB max storage-buffer range, one 2,048 MiB reported heap and three memory types |
+| OpenCL shell compute | **CONFIRMED** | Earlier shell kernel compilation/dispatch/readback passed |
+| OpenCL from ordinary APK | **FAILED at normal library load** | `dlopen("libOpenCL.so")` cannot resolve in app namespace |
+| Sustained GPU/thermal behavior | **NOT ESTABLISHED** | No controlled long-duration test or GPU temperature telemetry |
+| AI inference acceleration | **NOT TESTED** | Vector-add correctness is not an inference test |
+
+**Benchmark caveat:** The uploaded GPUProbe source re-submits a command buffer recorded with `VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT`. The observed output checks passed, but repeated-dispatch timing is provisional until the command-buffer lifecycle is corrected and rerun.
+
+Full evidence: [docs/hardware/gpuprobe-apk-validation-2026-11-02.md](hardware/gpuprobe-apk-validation-2026-11-02.md) in the hardware dossier repository. These tests do not demonstrate that the candidate IN6-Linux kernel has booted; physical kernel boot remains **NO / pending**.
